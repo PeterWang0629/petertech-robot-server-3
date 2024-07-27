@@ -1,0 +1,16 @@
+{
+  "ref": {},
+  "ban": [],
+  "gpt": {
+    "key": "",
+    "history": [],
+    "conversation": {},
+    "draw": {}
+  },
+  "users": {},
+  "error": {},
+  "guijiao": {
+    "history": []
+  },
+  "config": {}
+}

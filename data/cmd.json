@@ -1,0 +1,478 @@
+{
+  "type": "root",
+  "sub_commands": [
+    {
+      "type": "sub",
+      "content": ["command","cmd","c"],
+      "sub_commands": [
+        {
+          "type": "cmd",
+          "content": ["config","c"],
+          "arg": [
+            {
+              "type": "str",
+              "content": "Key"
+            },
+            {
+              "type": "spec",
+              "content": "Value"
+            }
+          ],
+          "func": "modify_config({Key},{Value})"
+        },
+        {
+          "type": "sub",
+          "content": ["ref"],
+          "sub_commands": [
+            {
+              "type": "cmd",
+              "content": ["add","+"],
+              "arg": [
+                {
+                  "type": "choice",
+                  "content": "Ref_Type",
+                  "choice": [
+                    "txt",
+                    "md"
+                  ]
+                },
+                {
+                  "type": "str",
+                  "content": "Ref_Key"
+                },
+                {
+                  "type": "spec",
+                  "content": "Ref_Msg"
+                }
+              ],
+              "func": "add_ref({Ref_Type},{Ref_Key},{Ref_Msg})"
+            },
+            {
+              "type": "cmd",
+              "content": ["del","-","remove"],
+              "arg": [
+                {
+                  "type": "str",
+                  "content": "Ref_Key"
+                }
+              ],
+              "func": "del_ref({Ref_Key})"
+            },
+            {
+              "type": "cmd",
+              "content": ["list","l"],
+              "arg": [],
+              "func": "list_ref()"
+            }
+          ]
+        },
+        {
+          "type": "sub",
+          "content": ["ban","b"],
+          "sub_commands": [
+            {
+              "type": "cmd",
+              "content": ["add","+"],
+              "arg": [
+                {
+                  "type": "spec",
+                  "content": "Ban_User"
+                }
+              ],
+              "func": "ban_user({Ban_User})"
+            },
+            {
+              "type": "cmd",
+              "content": ["del","remove","-"],
+              "arg": [
+                {
+                  "type": "spec",
+                  "content": "Pardon_User"
+                }
+              ],
+              "func": "pardon_user({Pardon_User})"
+            },
+            {
+              "type": "cmd",
+              "content": ["list","l"],
+              "arg": [],
+              "func": "ban_list()"
+            }
+          ]
+        },
+        {
+          "type": "sub",
+          "content": ["gpt"],
+          "sub_commands": [
+            {
+              "type": "sub",
+              "content": ["key"],
+              "sub_commands": [
+                {
+                  "type": "cmd",
+                  "content": ["set","s","="],
+                  "arg": [
+                    {
+                      "type": "spec",
+                      "content": "GPT_Key"
+                    }
+                  ],
+                  "func": "set_key({GPT_Key})"
+                },
+                {
+                  "type": "cmd",
+                  "content": ["__DEFAULT__"],
+                  "arg": [],
+                  "func": "show_key()"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "cmd",
+          "content": ["status","stat","s"],
+          "arg": [],
+          "func": "server_status()"
+        },
+        {
+              "type": "cmd",
+              "content": ["fullstatus","fstat","fs"],
+              "arg": [],
+              "func": "server_full_status()"
+        }
+      ]
+    },
+    {
+      "type": "sub",
+      "content": ["alts","a"],
+      "sub_commands": [
+        {
+          "type": "cmd",
+          "content": ["os"],
+          "arg": [
+            {
+              "type": "spec",
+              "content": "Os_Cmd"
+            }
+          ],
+          "func": "os_cmd({Os_Cmd})"
+        },
+        {
+          "type": "cmd",
+          "content": ["py","python"],
+          "arg": [
+            {
+              "type": "spec",
+              "content": "Py_Code"
+            }
+          ],
+          "func": "python_code({Py_Code})"
+        },
+        {
+          "type": "cmd",
+          "content": ["say"],
+          "arg": [
+            {
+              "type": "spec",
+              "content": "Msg"
+            }
+          ],
+          "func": "say_text({Msg})"
+        },
+        {
+          "type": "cmd",
+          "content": ["saymd"],
+          "arg": [
+            {
+              "type": "spec",
+              "content": "Msg"
+            }
+          ],
+          "func": "say_md({Msg})"
+        },
+        {
+          "type": "cmd",
+          "content": ["raise"],
+          "arg": [
+            {
+              "type": "spec",
+              "content": "Err_Msg"
+            }
+          ],
+          "func": "raise_error({Err_Msg})"
+        },
+        {
+          "type": "cmd",
+          "content": ["saytextin","si"],
+          "arg": [
+            {
+              "type": "str",
+              "content": "Msg"
+            },
+            {
+              "type": "spec",
+              "content": "Webhook_Url"
+            }
+          ],
+          "func": "say_text_in({Msg},{Webhook_Url})"
+        },
+        {
+          "type": "cmd",
+          "content": ["saymdin","smi"],
+          "arg": [
+            {
+              "type": "str",
+              "content": "Msg"
+            },
+            {
+              "type": "spec",
+              "content": "Webhook_Url"
+            }
+          ],
+          "func": "say_md_in({Msg},{Webhook_Url})"
+        }
+      ]
+    },
+    {
+      "type": "sub",
+      "content": ["gpt","g"],
+      "sub_commands": [
+        {
+          "type": "sub",
+          "content": ["chatgpt","chat","c"],
+          "sub_commands": [
+            {
+              "type": "cmd",
+              "content": ["newchat","new","nc","n"],
+              "arg": [],
+              "func": "new_chat_()"
+            },
+            {
+              "type": "cmd",
+              "content": ["currentchat","cur","c"],
+              "arg": [],
+              "func": "current_chat()"
+            },
+            {
+              "type": "cmd",
+              "content": ["__DEFAULT__"],
+              "arg": [
+                {
+                  "type": "spec",
+                  "content": "Chat_Msg"
+                }
+              ],
+              "func": "chat_({Chat_Msg})"
+            }
+          ]
+        },
+        {
+          "type": "sub",
+          "content": ["draw","d"],
+          "sub_commands": [
+            {
+              "type": "cmd",
+              "content": ["new","n"],
+              "arg": [
+                {
+                  "type": "spec",
+                  "content": "Draw_Prompts"
+                }
+              ],
+              "func": "new_draw({Draw_Prompts})"
+            },
+            {
+              "type": "cmd",
+              "content": ["status","stat","s"],
+              "arg": [],
+              "func": "check_status()"
+            },
+            {
+              "type": "cmd",
+              "content": ["set"],
+              "arg": [
+                {
+                  "type": "spec",
+                  "content": "Hash_ID"
+                }
+              ],
+              "func": "set_hash_id({Hash_ID})"
+            },
+            {
+              "type": "cmd",
+              "content": ["reset"],
+              "arg": [],
+              "func": "reset_hash_id()"
+            }
+          ]
+        },
+        {
+          "type": "cmd",
+          "content": ["account","a"],
+          "arg": [],
+          "func": "check_account()"
+        }
+      ]
+    },
+    {
+      "type": "sub",
+      "content": ["data","dat","d"],
+      "sub_commands": [
+        {
+          "type": "cmd",
+          "content": ["reset", "r"],
+          "arg": [],
+          "func": "reset_data()"
+        },
+        {
+          "type": "cmd",
+          "content": ["__DEFAULT__"],
+          "arg": [],
+          "func": "show_data()"
+        },
+        {
+          "type": "cmd",
+          "content": ["set", "s"],
+          "arg": [
+            {
+              "type": "spec",
+              "content": "Data"
+            }
+          ],
+          "func": "set_data(Data)"
+        }
+      ]
+    },
+    {
+      "type": "sub",
+      "content": ["guijiao","j"],
+      "sub_commands": [
+        {
+          "type": "cmd",
+          "content": ["create","c"],
+          "arg": [
+            {
+              "type": "spec",
+              "content": "Guijiao_Msg"
+            }
+          ],
+          "func": "new_guijiao({Guijiao_Msg})"
+        },
+        {
+          "type": "cmd",
+          "content": ["growgrass", "grow_grass", "gg","g"],
+          "arg": [
+            {
+              "type": "int",
+              "content": "Times"
+            },
+            {
+              "type": "spec",
+              "content": "Format"
+            }
+          ],
+          "func": "grow_grass({Times}, {Format})"
+        },
+        {
+          "type": "cmd",
+          "content": ["cc"],
+          "arg": [
+            {
+              "type": "str",
+              "content": "Cmd_Dict"
+            },
+            {
+              "type": "spec",
+              "content": "Cmd"
+            }
+          ],
+          "func": "execute_server_console_command({Cmd_Dict}, {Cmd})"
+        },
+        {
+          "type": "sub",
+          "content": ["online", "o"],
+          "sub_commands": [
+            {
+              "type": "cmd",
+              "content": ["add", "+"],
+              "arg": [
+                {
+                  "type": "str",
+                  "content": "Name"
+                },
+                {
+                  "type": "spec",
+                  "content": "Ip_Address"
+                }
+              ],
+              "func": "add_online_check({Name}, {Ip_Address})"
+            },
+            {
+              "type": "cmd",
+              "content": ["remove", "-"],
+              "arg": [
+                {
+                  "type": "spec",
+                  "content": "Name"
+                }
+              ],
+              "func": "remove_online_check({Name})"
+            },
+            {
+              "type": "cmd",
+              "content": ["query", "q", "?"],
+              "arg": [
+                {
+                  "type": "spec",
+                  "content": "Name"
+                }
+              ],
+              "func": "query_online_check({Name})"
+            },
+            {
+              "type": "cmd",
+              "content": ["start", "s"],
+              "arg": [
+              ],
+              "func": "start_online_check()"
+            }
+          ]
+        },
+        {
+          "type": "sub",
+          "content": ["timer", "t"],
+          "sub_commands": [
+            {
+              "type": "cmd",
+              "content": ["set", "s"],
+              "arg": [
+                {
+                  "type": "str",
+                  "content": "Name"
+                },
+                {
+                  "type": "spec",
+                  "content": "Time"
+                }
+              ],
+              "func": "set_timer({Name}, {Time})"
+            },
+            {
+              "type": "cmd",
+              "content": ["__DEFAULT__"],
+              "arg": [
+                {
+                  "type": "spec",
+                  "content": "Name"
+                }
+              ],
+              "func": "get_timer({Name})"
+            }
+          ]
+        }
+      ]
+
+    }
+  ]
+}

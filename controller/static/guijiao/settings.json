@@ -1,0 +1,6 @@
+{
+	"sourceDirectory": "controller/static/guijiao/sources/",
+	"ysddSourceDirectory": "controller/static/guijiao/ysddSources/",
+	"dictFile": "controller/static/guijiao/dictionary.json",
+	"ysddTableFile": "controller/static/guijiao/ysddTable.json"
+}

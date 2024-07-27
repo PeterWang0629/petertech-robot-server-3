@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>机器人页面导览</title>
+<style>
+  body {
+    background-color: #121212;
+    color: #FFFFFF;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .guide-container {
+    background-color: #212121;
+    border-radius: 10px;
+    padding: 20px;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+  }
+
+  li:hover {
+    background-color: #333333;
+    transform: translateY(-2px);
+  }
+
+  .arrow {
+    font-size: 20px;
+  }
+</style>
+</head>
+<body>
+  <h1>机器人页面导览</h1>
+  <div class="guide-container">
+    <ul>
+      <li onclick="window.location.href='/history/error'">错误历史 <span class="arrow">&#10132;</span></li>
+      <li onclick="window.location.href='/history/chat'">ChatGPT应用历史 <span class="arrow">&#10132;</span></li>
+      <li onclick="window.location.href='/history/guijiao'">Guijiao应用历史 <span class="arrow">&#10132;</span></li>
+      <!-- 添加更多页面链接项目 -->
+    </ul>
+  </div>
+</body>
+</html>

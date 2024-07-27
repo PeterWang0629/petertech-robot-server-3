@@ -1,0 +1,12 @@
+waitress~=2.1.2
+Werkzeug~=3.0.1
+requests~=2.31.0
+Flask~=3.0.0
+psutil~=5.9.6
+urllib3~=2.1.0
+sseclient~=0.0.27
+soundfile~=0.12.1
+psola~=0.0.1
+numpy~=1.26.3
+playsound~=1.3.0
+pypinyin~=0.50.0

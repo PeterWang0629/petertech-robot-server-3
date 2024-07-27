@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error Report</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #FFFFFF;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .error-container {
+            background-color: #212121;
+            border-radius: 10px;
+            padding: 20px;
+            width: 80%;
+            max-width: 1000px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        p {
+            margin: 10px 0;
+            word-wrap: break-word;
+        }
+
+        .error-time {
+            color: #FF5733;
+        }
+
+        .error-message {
+            color: #FFC300;
+        }
+
+        .back-button {
+            display: inline-block;
+            background-color: #444444;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            text-decoration: none;
+        }
+
+        .back-button:hover {
+            background-color: #555555;
+            transform: translateY(-2px);
+        }
+
+        .back-icon {
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="error-container" id="error-container">
+    <a class="back-button" href="../history/error">
+        <span class="back-icon">&lt;</span> Back
+    </a>
+    <h1>Error Report</h1>
+    <p class="error-time"><strong>Time: </strong><span id="error-time"></span></p>
+    <p class="error-message"><strong>Error ID: </strong><span id="error-id"></span></p>
+    <p class="error-message"><strong>Traceback: </strong><br><span id="error-content"></span></p>
+</div>
+
+<script>
+    var urlParams = new URLSearchParams(window.location.search);
+    var errorId = urlParams.get('id');
+
+    var xhr = new XMLHttpRequest()
+    xhr.open("POST", "/history/get-error-history")
+    xhr.responseType = "json";
+    xhr.onload = function () {
+
+
+        if (xhr.status === 200) {
+            let data = xhr.response["data"]["error_history"];
+            let errorContainer = document.getElementById("error-container");
+            if (data.hasOwnProperty(errorId)) {
+                let errorTime = new Date(data[errorId].time * 1000).toLocaleString();
+                let errorContent = data[errorId].error.replace(/\n/g,"<br>");;
+                document.getElementById("error-time").textContent = errorTime;
+                document.getElementById("error-id").textContent = errorId;
+                document.getElementById("error-content").innerHTML = errorContent;
+            } else {
+                errorContainer.innerHTML = "<h1>Error Not Found</h1>";
+            }
+        } else {
+            errorContainer.innerHTML = "<h1>Get Data Failed</h1>";
+        }
+    };
+
+    xhr.send();
+</script>
+</body>
+</html>

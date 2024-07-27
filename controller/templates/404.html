@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404错误</title>
+<style>
+  body {
+    background-color: #121212;
+    color: #FFFFFF;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .error-container {
+    background-color: #212121;
+    border-radius: 10px;
+    padding: 20px;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  p {
+    margin: 10px 0;
+  }
+
+  .return-button {
+    background-color: #444444;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+  }
+
+  .return-button:hover {
+    background-color: #555555;
+    transform: translateY(-2px);
+  }
+
+  .return-icon {
+    vertical-align: middle;
+    margin-right: 5px;
+  }
+</style>
+</head>
+<body>
+  <h1>404</h1>
+  <div class="error-container">
+    <p>抱歉，您访问的页面不存在。</p>
+    <a href="/" class="return-button">
+      <span class="return-icon">&#9664;</span> 返回首页
+    </a>
+  </div>
+</body>
+</html>

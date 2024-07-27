@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guijiao History</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #FFFFFF;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin: 20px auto;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #212121;
+        }
+
+        tr:nth-child(even) {
+            background-color: #333333;
+        }
+
+        tr:hover {
+            background-color: #444444;
+        }
+
+        .link-button {
+            display: inline-block;
+            background-color: #444444;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            text-decoration: none;
+        }
+
+        .link-button:hover {
+            background-color: #555555;
+            transform: translateY(-2px);
+        }
+
+        .link-button.disabled {
+            background-color: #777777;
+            cursor: not-allowed;
+            pointer-events: none; /* Disable pointer events */
+        }
+
+        .link-icon {
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+
+        .return-button {
+            background-color: #444444;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            text-decoration: none;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .return-button:hover {
+            background-color: #555555;
+            transform: translateY(-2px);
+        }
+
+        .return-icon {
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+    </style>
+    <script>
+        var xhr = new XMLHttpRequest()
+        xhr.open("POST", "/history/get-guijiao-history")
+        xhr.responseType = "json";
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                let data = xhr.response["data"]["guijiao_history"];
+
+                data.sort(function (a, b) {
+                    return b.time - a.time; // Sort Guijiao history by time in descending order
+                });
+
+                let table = document.getElementById("history-table")
+                data.forEach(function (entry) {
+                    let tr = document.createElement("tr");
+                    let time_td = document.createElement("td");
+                    let content_td = document.createElement("td");
+                    let audio_td = document.createElement("td");
+                    time_td.textContent = new Date(entry.time * 1000).toLocaleString();
+                    content_td.innerHTML = entry.content.replace(/\n/g, "<br>");
+                    audio_td.textContent = entry.id;
+
+                    tr.onclick = function () {
+                        let audio_id = this.lastChild.textContent;
+                        let url = "/guijiao/" + audio_id;
+                        window.open(url);
+                    };
+
+                    tr.appendChild(time_td);
+                    tr.appendChild(content_td);
+                    tr.appendChild(audio_td);
+                    table.appendChild(tr);
+                });
+            } else {
+                let data = xhr.response["data"]["guijiao_history"];
+                let table = document.getElementById("history-table")
+                let err_tr = document.createElement("tr");
+                let error_td = document.createElement("td");
+                let code_td = document.createElement("td");
+                let msg_td = document.createElement("td");
+                error_td.textContent = "Load Failed";
+                code_td.textContent = data.code
+                msg_td.textContent = data.msg
+                err_tr.appendChild(error_td);
+                err_tr.appendChild(code_td);
+                err_tr.appendChild(msg_td);
+                table.appendChild(err_tr);
+            }
+        };
+
+        xhr.send();
+    </script>
+</head>
+<body>
+<a href="/" class="return-button">
+    <span class="return-icon">&#9664;</span> Back
+</a>
+<h1>Guijiao History</h1>
+<table id="history-table">
+    <thead>
+    <tr>
+        <th>Time</th>
+        <th>Content</th>
+        <th>Audio ID</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+</body>
+</html>
