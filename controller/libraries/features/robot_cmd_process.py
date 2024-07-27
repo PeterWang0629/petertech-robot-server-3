@@ -425,7 +425,7 @@ class RobotCommands:
                 elif arg["type"] == "int":
                     if not cmd[arg_inx].isdigit():
                         send_md_msg(self.senderid, "[Error Message]",
-                                    "**错误的命令:**\\\n" + fa_cmd + " required an integer argument '" +
+                                    "**Incorrect command usage:**\\\n" + fa_cmd + " required an integer argument '" +
                                     arg["content"] + "\\\nBut the given argument value is not an integer: '" +
                                     cmd[arg_inx] + "'\\\n" + self.generate_help(
                                         cmd_directory), self.webhook_url)

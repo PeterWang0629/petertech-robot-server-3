@@ -3,11 +3,18 @@
   "sub_commands": [
     {
       "type": "sub",
-      "content": ["command","cmd","c"],
+      "content": [
+        "command",
+        "cmd",
+        "c"
+      ],
       "sub_commands": [
         {
           "type": "cmd",
-          "content": ["config","c"],
+          "content": [
+            "config",
+            "c"
+          ],
           "arg": [
             {
               "type": "str",
@@ -22,11 +29,16 @@
         },
         {
           "type": "sub",
-          "content": ["ref"],
+          "content": [
+            "ref"
+          ],
           "sub_commands": [
             {
               "type": "cmd",
-              "content": ["add","+"],
+              "content": [
+                "add",
+                "+"
+              ],
               "arg": [
                 {
                   "type": "choice",
@@ -49,7 +61,11 @@
             },
             {
               "type": "cmd",
-              "content": ["del","-","remove"],
+              "content": [
+                "del",
+                "-",
+                "remove"
+              ],
               "arg": [
                 {
                   "type": "str",
@@ -60,7 +76,10 @@
             },
             {
               "type": "cmd",
-              "content": ["list","l"],
+              "content": [
+                "list",
+                "l"
+              ],
               "arg": [],
               "func": "list_ref()"
             }
@@ -68,11 +87,17 @@
         },
         {
           "type": "sub",
-          "content": ["ban","b"],
+          "content": [
+            "ban",
+            "b"
+          ],
           "sub_commands": [
             {
               "type": "cmd",
-              "content": ["add","+"],
+              "content": [
+                "add",
+                "+"
+              ],
               "arg": [
                 {
                   "type": "spec",
@@ -83,7 +108,11 @@
             },
             {
               "type": "cmd",
-              "content": ["del","remove","-"],
+              "content": [
+                "del",
+                "remove",
+                "-"
+              ],
               "arg": [
                 {
                   "type": "spec",
@@ -94,7 +123,10 @@
             },
             {
               "type": "cmd",
-              "content": ["list","l"],
+              "content": [
+                "list",
+                "l"
+              ],
               "arg": [],
               "func": "ban_list()"
             }
@@ -102,15 +134,23 @@
         },
         {
           "type": "sub",
-          "content": ["gpt"],
+          "content": [
+            "gpt"
+          ],
           "sub_commands": [
             {
               "type": "sub",
-              "content": ["key"],
+              "content": [
+                "key"
+              ],
               "sub_commands": [
                 {
                   "type": "cmd",
-                  "content": ["set","s","="],
+                  "content": [
+                    "set",
+                    "s",
+                    "="
+                  ],
                   "arg": [
                     {
                       "type": "spec",
@@ -121,7 +161,9 @@
                 },
                 {
                   "type": "cmd",
-                  "content": ["__DEFAULT__"],
+                  "content": [
+                    "__DEFAULT__"
+                  ],
                   "arg": [],
                   "func": "show_key()"
                 }
@@ -131,25 +173,38 @@
         },
         {
           "type": "cmd",
-          "content": ["status","stat","s"],
+          "content": [
+            "status",
+            "stat",
+            "s"
+          ],
           "arg": [],
           "func": "server_status()"
         },
         {
-              "type": "cmd",
-              "content": ["fullstatus","fstat","fs"],
-              "arg": [],
-              "func": "server_full_status()"
+          "type": "cmd",
+          "content": [
+            "fullstatus",
+            "fstat",
+            "fs"
+          ],
+          "arg": [],
+          "func": "server_full_status()"
         }
       ]
     },
     {
       "type": "sub",
-      "content": ["alts","a"],
+      "content": [
+        "alts",
+        "a"
+      ],
       "sub_commands": [
         {
           "type": "cmd",
-          "content": ["os"],
+          "content": [
+            "os"
+          ],
           "arg": [
             {
               "type": "spec",
@@ -160,7 +215,10 @@
         },
         {
           "type": "cmd",
-          "content": ["py","python"],
+          "content": [
+            "py",
+            "python"
+          ],
           "arg": [
             {
               "type": "spec",
@@ -171,7 +229,9 @@
         },
         {
           "type": "cmd",
-          "content": ["say"],
+          "content": [
+            "say"
+          ],
           "arg": [
             {
               "type": "spec",
@@ -182,7 +242,9 @@
         },
         {
           "type": "cmd",
-          "content": ["saymd"],
+          "content": [
+            "saymd"
+          ],
           "arg": [
             {
               "type": "spec",
@@ -193,7 +255,9 @@
         },
         {
           "type": "cmd",
-          "content": ["raise"],
+          "content": [
+            "raise"
+          ],
           "arg": [
             {
               "type": "spec",
@@ -204,7 +268,10 @@
         },
         {
           "type": "cmd",
-          "content": ["saytextin","si"],
+          "content": [
+            "saytextin",
+            "si"
+          ],
           "arg": [
             {
               "type": "str",
@@ -219,7 +286,10 @@
         },
         {
           "type": "cmd",
-          "content": ["saymdin","smi"],
+          "content": [
+            "saymdin",
+            "smi"
+          ],
           "arg": [
             {
               "type": "str",
@@ -236,104 +306,35 @@
     },
     {
       "type": "sub",
-      "content": ["gpt","g"],
-      "sub_commands": [
-        {
-          "type": "sub",
-          "content": ["chatgpt","chat","c"],
-          "sub_commands": [
-            {
-              "type": "cmd",
-              "content": ["newchat","new","nc","n"],
-              "arg": [],
-              "func": "new_chat_()"
-            },
-            {
-              "type": "cmd",
-              "content": ["currentchat","cur","c"],
-              "arg": [],
-              "func": "current_chat()"
-            },
-            {
-              "type": "cmd",
-              "content": ["__DEFAULT__"],
-              "arg": [
-                {
-                  "type": "spec",
-                  "content": "Chat_Msg"
-                }
-              ],
-              "func": "chat_({Chat_Msg})"
-            }
-          ]
-        },
-        {
-          "type": "sub",
-          "content": ["draw","d"],
-          "sub_commands": [
-            {
-              "type": "cmd",
-              "content": ["new","n"],
-              "arg": [
-                {
-                  "type": "spec",
-                  "content": "Draw_Prompts"
-                }
-              ],
-              "func": "new_draw({Draw_Prompts})"
-            },
-            {
-              "type": "cmd",
-              "content": ["status","stat","s"],
-              "arg": [],
-              "func": "check_status()"
-            },
-            {
-              "type": "cmd",
-              "content": ["set"],
-              "arg": [
-                {
-                  "type": "spec",
-                  "content": "Hash_ID"
-                }
-              ],
-              "func": "set_hash_id({Hash_ID})"
-            },
-            {
-              "type": "cmd",
-              "content": ["reset"],
-              "arg": [],
-              "func": "reset_hash_id()"
-            }
-          ]
-        },
-        {
-          "type": "cmd",
-          "content": ["account","a"],
-          "arg": [],
-          "func": "check_account()"
-        }
-      ]
-    },
-    {
-      "type": "sub",
-      "content": ["data","dat","d"],
+      "content": [
+        "data",
+        "dat",
+        "d"
+      ],
       "sub_commands": [
         {
           "type": "cmd",
-          "content": ["reset", "r"],
+          "content": [
+            "reset",
+            "r"
+          ],
           "arg": [],
           "func": "reset_data()"
         },
         {
           "type": "cmd",
-          "content": ["__DEFAULT__"],
+          "content": [
+            "__DEFAULT__"
+          ],
           "arg": [],
           "func": "show_data()"
         },
         {
           "type": "cmd",
-          "content": ["set", "s"],
+          "content": [
+            "set",
+            "s"
+          ],
           "arg": [
             {
               "type": "spec",
@@ -346,11 +347,17 @@
     },
     {
       "type": "sub",
-      "content": ["guijiao","j"],
+      "content": [
+        "guijiao",
+        "j"
+      ],
       "sub_commands": [
         {
           "type": "cmd",
-          "content": ["create","c"],
+          "content": [
+            "create",
+            "c"
+          ],
           "arg": [
             {
               "type": "spec",
@@ -361,22 +368,9 @@
         },
         {
           "type": "cmd",
-          "content": ["growgrass", "grow_grass", "gg","g"],
-          "arg": [
-            {
-              "type": "int",
-              "content": "Times"
-            },
-            {
-              "type": "spec",
-              "content": "Format"
-            }
+          "content": [
+            "cc"
           ],
-          "func": "grow_grass({Times}, {Format})"
-        },
-        {
-          "type": "cmd",
-          "content": ["cc"],
           "arg": [
             {
               "type": "str",
@@ -391,11 +385,17 @@
         },
         {
           "type": "sub",
-          "content": ["online", "o"],
+          "content": [
+            "online",
+            "o"
+          ],
           "sub_commands": [
             {
               "type": "cmd",
-              "content": ["add", "+"],
+              "content": [
+                "add",
+                "+"
+              ],
               "arg": [
                 {
                   "type": "str",
@@ -410,7 +410,10 @@
             },
             {
               "type": "cmd",
-              "content": ["remove", "-"],
+              "content": [
+                "remove",
+                "-"
+              ],
               "arg": [
                 {
                   "type": "spec",
@@ -421,7 +424,11 @@
             },
             {
               "type": "cmd",
-              "content": ["query", "q", "?"],
+              "content": [
+                "query",
+                "q",
+                "?"
+              ],
               "arg": [
                 {
                   "type": "spec",
@@ -432,7 +439,10 @@
             },
             {
               "type": "cmd",
-              "content": ["start", "s"],
+              "content": [
+                "start",
+                "s"
+              ],
               "arg": [
               ],
               "func": "start_online_check()"
@@ -441,11 +451,17 @@
         },
         {
           "type": "sub",
-          "content": ["timer", "t"],
+          "content": [
+            "timer",
+            "t"
+          ],
           "sub_commands": [
             {
               "type": "cmd",
-              "content": ["set", "s"],
+              "content": [
+                "set",
+                "s"
+              ],
               "arg": [
                 {
                   "type": "str",
@@ -460,7 +476,9 @@
             },
             {
               "type": "cmd",
-              "content": ["__DEFAULT__"],
+              "content": [
+                "__DEFAULT__"
+              ],
               "arg": [
                 {
                   "type": "spec",
@@ -472,7 +490,6 @@
           ]
         }
       ]
-
     }
   ]
 }
