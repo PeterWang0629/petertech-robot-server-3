@@ -345,7 +345,7 @@ class RobotCommandFuncs:
         if Print_Chat:
             send_md_msg(self.senderid, "[Chat Log]", handler.chat, self.webhook_url)
         send_md_msg(self.senderid, "[Robot Message]",
-                    f"**Minecraft Server Status**<br>**Time:** {time.strftime('%Y-%m-%d %H:%M:%S')}<br>**DNS Record:** {address}:{port}<br>**Player Count:** {handler.player_count[0]}+{handler.player_count[1]}<br>**Queue Length:** {handler.queue_length[0]}<br>*Query completed in {round(ts2 - ts1, 2)} sec*",
+                    f"**Minecraft Server Status**<br>**Time:** {time.strftime('%Y-%m-%d %H:%M:%S')}<br>**DNS Record:** {address}:{port}<br>**Player Count:** {handler.player_count[0]}+{handler.player_count[1]}<br>**Queue Length:** {handler.queue_length[0]-1}<br>*Query completed in {round(ts2 - ts1, 2)} sec*",
                     self.webhook_url)
 
 
