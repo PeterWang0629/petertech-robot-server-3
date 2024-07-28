@@ -499,7 +499,7 @@
         "m"
       ],
       "arg": [{
-        "type": "int",
+        "type": "str",
         "content": "Print_Chat"
       }],
       "func": "query_minecraft_server_status({Print_Chat})"
