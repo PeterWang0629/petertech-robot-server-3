@@ -304,13 +304,14 @@ class RobotCommandFuncs:
 
             def handle_join_game(self, join_game_packet):
                 self.joined_game = True
+                
+                packet = ChatPacket()
+                packet.message = f"/login {self.login_password}"
+                connection.write_packet(packet)
+                self.logged_in = True
+                
 
             def handle_chat(self, chat_packet: ChatMessagePacket):
-                if not self.logged_in:
-                    packet = ChatPacket()
-                    packet.message = f"/login {self.login_password}"
-                    connection.write_packet(packet)
-                    self.logged_in = True
                 try:
                     # print(parse_packet(chat_packet.json_data, {}, "text"))
 
