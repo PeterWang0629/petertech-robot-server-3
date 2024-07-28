@@ -314,7 +314,7 @@ class RobotCommandFuncs:
                 try:
                     # print(parse_packet(chat_packet.json_data, {}, "text"))
 
-                    self.chat += parse_packet(chat_packet.json_data, {}, "text") + "<br>"
+                    self.chat += parse_packet(chat_packet.json_data, {}, "markdown") + "<br>"
                     if not self.queue_length and self.logged_in and self.joined_game:
                         self.queue_length = extract_queue_length(
                             parse_packet(chat_packet.json_data, {}, "text"))
