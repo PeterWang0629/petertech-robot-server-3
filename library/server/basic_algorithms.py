@@ -1,4 +1,7 @@
-import time, json
+import time
+import json
+import re
+import dns.resolver
 import library.server.configure as configure
 
 
@@ -67,3 +70,17 @@ def md_endswith_title(markdown):
         return True
     else:
         return False
+
+
+def query_srv_record(domain):
+    domain = f"_minecraft._tcp.{domain}"
+    answers = dns.resolver.resolve(domain, 'SRV')
+    return [answers[0].target.__str__(), answers[0].port]
+
+
+def is_valid_ipv4(ip_str):
+    pattern = re.compile(r'^(\d{1,3}\.){3}\d{1,3}$')
+    if pattern.match(ip_str):
+        parts = ip_str.split('.')
+        return all(0 <= int(part) <= 255 for part in parts)
+    return False

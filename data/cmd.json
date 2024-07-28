@@ -490,6 +490,16 @@
           ]
         }
       ]
+    },
+    {
+      "type": "cmd",
+      "content": [
+        "minecraft",
+        "mc",
+        "m"
+      ],
+      "arg": [],
+      "func": "query_minecraft_server_status()"
     }
   ]
 }

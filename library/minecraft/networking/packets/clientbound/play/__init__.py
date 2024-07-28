@@ -194,6 +194,7 @@ class SpawnPlayerPacket(Packet):
         {'yaw': Angle},
         {'pitch': Angle},
         {'current_item': Short} if context.protocol_earlier_eq(49) else {},
+        # TODO: read entity metadata (protocol < 550)
     ])
 
     # Access the 'x', 'y', 'z' fields as a Vector tuple.

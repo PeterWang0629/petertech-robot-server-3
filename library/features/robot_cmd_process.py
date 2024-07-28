@@ -1,5 +1,8 @@
-from library.server.basic_algorithms import read_data, get_init_data, reset_data, dict_cmp, save_data, \
-    md_startswith_title, md_endswith_title, time_stamp_to_str
+from library.features.chat_parse import parse_packet
+from library.minecraft.networking.packets import ChatMessagePacket, ChatPacket, Packet, JoinGamePacket
+from library.minecraft.networking.packets.clientbound.play import PlayerListHeaderAndFooterPacket
+from library.minecraft.networking.connection import Connection
+from library.server.basic_algorithms import *
 from library.server.cmd_process import ConsoleCommands
 from library.server.fileio import FileIO
 from library.server.logger import Logger
@@ -54,20 +57,20 @@ class RobotCommandFuncs:
         if self.dat["ref"] == {}:
             send_md_msg(self.senderid, "[Data]", "**No existing autoresponders.**", self.webhook_url)
             return
-        msg = "**All autoresponders:**\\\n"
+        msg = "**All autoresponders:**<br>"
         flag = 0
         for Ref_Key in self.dat["ref"]:
             msg += "**" + self.dat["ref"][Ref_Key]["type"] + "** " + Ref_Key + ":"
             if md_startswith_title(self.dat["ref"][Ref_Key]["answer"]):
                 msg += "\n"
             else:
-                msg += "\\\n"
+                msg += "<br>"
             msg += self.dat["ref"][Ref_Key]["answer"]
             if md_endswith_title(self.dat["ref"][Ref_Key]["answer"]):
-                msg += "\n\\\n"
+                msg += "\n<br>"
                 flag = True
             else:
-                msg += "\\\n\\\n"
+                msg += "<br><br>"
                 flag = False
         if flag:
             send_md_msg(self.senderid, "[Data]", msg[:-3], self.webhook_url)
@@ -95,7 +98,7 @@ class RobotCommandFuncs:
             send_text_msg(self.senderid, 'This user is not banned.', self.webhook_url)
 
     def ban_list(self):
-        send_md_msg(self.senderid, "[Data]", "**封禁列表:**\\\n" + str(self.dat["ban"]), self.webhook_url)
+        send_md_msg(self.senderid, "[Data]", "**封禁列表:**<br>" + str(self.dat["ban"]), self.webhook_url)
 
     def set_key(self, GPT_Key):
         self.dat["gpt"]["key"] = GPT_Key
@@ -150,7 +153,7 @@ class RobotCommandFuncs:
         send_md_msg(self.senderid, "[Robot Message]", "Operation success.", self.webhook_url)
 
     def show_data(self):
-        send_md_msg(self.senderid, "[Data]", "**存储的数据:**\\\n" + str(self.dat), self.webhook_url)
+        send_md_msg(self.senderid, "[Data]", "**存储的数据:**<br>" + str(self.dat), self.webhook_url)
 
     def set_data(self, Data):
         self.dat = json.loads(Data)
@@ -161,12 +164,12 @@ class RobotCommandFuncs:
         if not type(self.dat["timer"]) == dict or "name" in self.dat["timer"] or "time" in self.dat["timer"]:
             self.dat["timer"] = {}
             send_md_msg(self.senderid, "[Data]",
-                        f"**Warning**\\\nOld data format!",
+                        f"**Warning**<br>Old data format!",
                         self.webhook_url)
         self.dat["timer"][Name] = Time
         save_data(self.fileio, self.dat)
         send_md_msg(self.senderid, "[Timer Message]",
-                    f"**Operation Success**\\\nSet countdown {Name} target to {Time}",
+                    f"**Operation Success**<br>Set countdown {Name} target to {Time}",
                     self.webhook_url)
 
     def get_timer(self, Name):
@@ -192,29 +195,29 @@ class RobotCommandFuncs:
 
         result = f"{years} Years {months} Months {days} Days {hours} Hours {minutes} Minutes {seconds} Seconds"
         send_md_msg(self.senderid, "[Timer Message]",
-                    f"**Countdown {Name} Remaining Time**\\\n{result}",
+                    f"**Countdown {Name} Remaining Time**<br>{result}",
                     self.webhook_url)
 
     def execute_server_console_command(self, Cmd_Dict, Cmd):
         cc = ConsoleCommands(self.fileio, self.logger, True)  # Skip
         cc.cmd = json.loads(Cmd_Dict)
-        res = cc.execute_command(Cmd).replace('\n', '\\\n')
+        res = cc.execute_command(Cmd).replace('\n', '<br>')
         send_md_msg(self.senderid, "[CMD Message]",
-                    f"**Result**\\\n{res}",
+                    f"**Result**<br>{res}",
                     self.webhook_url)
 
     def add_online_check(self, Name, Ip_Address):
         self.dat["online"][Name] = {"ip": Ip_Address, "status": "offline", "time": time.time()}
         save_data(self.fileio, self.dat)
         send_md_msg(self.senderid, "[Device Status]",
-                    f"**Creation Operation Success**\\\nName: {Name}\\\nIP: {Ip_Address}",
+                    f"**Creation Operation Success**<br>Name: {Name}<br>IP: {Ip_Address}",
                     self.webhook_url)
 
     def remove_online_check(self, Name):
         if Name in self.dat["online"]:
             self.dat["online"].pop(Name)
             send_md_msg(self.senderid, "[Device Status]",
-                        f"**Deletion Operation Success**\\\nName: {Name}",
+                        f"**Deletion Operation Success**<br>Name: {Name}",
                         self.webhook_url)
             save_data(self.fileio, self.dat)
         else:
@@ -225,7 +228,7 @@ class RobotCommandFuncs:
     def query_online_check(self, Name):
         if Name in self.dat["online"]:
             send_md_msg(self.senderid, "[Device Status]",
-                        f"**Device Status**\\\nName: {Name}\\\nIP: {self.dat['online'][Name]['ip']}\\\nStatus: {self.dat['online'][Name]['status']}\\\nLatest status change: {time_stamp_to_str(self.dat['online'][Name]['time'])}",
+                        f"**Device Status**<br>Name: {Name}<br>IP: {self.dat['online'][Name]['ip']}<br>Status: {self.dat['online'][Name]['status']}<br>Latest status change: {time_stamp_to_str(self.dat['online'][Name]['time'])}",
                         self.webhook_url)
         else:
             send_md_msg(self.senderid, "[Device Status]",
@@ -233,7 +236,8 @@ class RobotCommandFuncs:
                         self.webhook_url)
 
     def online_check_task(self):
-        webhook = "https://oapi.dingtalk.com/robot/send?access_token=b2b15239cd2204824b594c2b2c5bed7a5f3fe04e5df9461108ea420e03b884b3"
+        webhook = ("https://oapi.dingtalk.com/robot/send?access_token"
+                   "=b2b15239cd2204824b594c2b2c5bed7a5f3fe04e5df9461108ea420e03b884b3")
         while True:
             try:
                 for device in self.dat["online"]:
@@ -256,12 +260,87 @@ class RobotCommandFuncs:
         task = threading.Thread(target=self.online_check_task)
         task.start()
         send_md_msg(self.senderid, "[Device Status]",
-                    f"**Task started**\\\nDo not start the task again!",
+                    f"**Task started**<br>Do not start the task again!",
                     self.webhook_url)
 
-    def check_minecraft_server_status(self):
+    def query_minecraft_server_status(self):
         send_md_msg(self.senderid, "[Robot Message]",
-                    f"Please wait, checking...",
+                    f"Please wait, querying...",
+                    self.webhook_url)
+        ts1 = time.time()
+        username = "statbot1"
+        login_password = "Bot123456#"
+        domain = query_srv_record("3c3u.org")
+        address, port = domain[0], domain[1]
+
+        def extract_player_count(string):
+            match = re.search(r'\b(\d+)\s*\+\s*(\d+)\b', string)
+            if match:
+                return (int(match.group(1)), int(match.group(2)))
+            else:
+                return None
+
+        def extract_queue_length(string):
+            if "队列中" in string and "前面" in string:
+                numbers = re.findall(r'\d+', string)
+                if len(numbers) == 2:
+                    return tuple(map(int, numbers))
+            return None
+
+        class PacketHandler(object):
+            def __init__(self, login_password):
+                self.joined_game = False
+                self.queue_length = None
+                self.player_count = None
+                self.logged_in = False
+                self.login_password = login_password
+
+            def handle_incoming(self, packet=None):
+                return
+
+            def handle_outgoing(self, packet=None):
+                return
+
+            def handle_join_game(self, join_game_packet):
+                self.joined_game = True
+
+            def handle_chat(self, chat_packet: ChatMessagePacket):
+                if not self.logged_in:
+                    packet = ChatPacket()
+                    packet.message = f"/login {self.login_password}"
+                    connection.write_packet(packet)
+                    self.logged_in = True
+                try:
+                    print(parse_packet(chat_packet.json_data, {}, "text"))
+                    if not self.queue_length and self.logged_in and self.joined_game:
+                        self.queue_length = extract_queue_length(
+                            parse_packet(chat_packet.json_data, {}, "text"))
+                except Exception as e:
+                    return
+
+            def handle_player_list_header_and_footer(self, packet: PlayerListHeaderAndFooterPacket):
+                txt = parse_packet(packet.header, {}, "text")
+                for line in txt.split("\n"):
+                    if self.player_count or not self.logged_in or not self.joined_game:
+                        break
+                    self.player_count = extract_player_count(line)
+
+        connection = Connection(address, port, username=username)
+        handler = PacketHandler(login_password)
+        connection.register_packet_listener(handler.handle_incoming, Packet, early=True)
+        connection.register_packet_listener(handler.handle_outgoing, Packet, outgoing=True)
+        connection.register_packet_listener(handler.handle_join_game, JoinGamePacket)
+        connection.register_packet_listener(handler.handle_chat, ChatMessagePacket)
+        connection.register_packet_listener(handler.handle_player_list_header_and_footer,
+                                            PlayerListHeaderAndFooterPacket)
+        connection.connect()
+        while not handler.queue_length or not handler.player_count:
+            pass
+        connection.disconnect()
+        ts2 = time.time()
+        # print(handler.player_count, handler.queue_length)
+        send_md_msg(self.senderid, "[Robot Message]",
+                    f"**Minecraft Server Status**<br>**Time:** {time.strftime('%Y-%m-%d %H:%M:%S')}<br>**DNS Record:** {address}:{port}<br>**Player Count:** {handler.player_count[0]}+{handler.player_count[1]}<br>**Queue Length:** {handler.queue_length[0]}<br>*Query completed in {round(ts2 - ts1, 2)} sec*",
                     self.webhook_url)
 
 
@@ -284,13 +363,13 @@ class RobotCommands:
         except:
             self.dat = reset_data(self.fileio)
             send_md_msg(self.senderid, "[Error Message]",
-                        "**Data Error**\\\nFailed while reading data file.\\\nRecreated data file.\\\nTime:" + datetime.now().strftime(
+                        "**Data Error**<br>Failed while reading data file.<br>Recreated data file.<br>Time:" + datetime.now().strftime(
                             "%c"), self.webhook_url)
             return
         if not dict_cmp(init_dat, self.dat):
             self.dat = reset_data(self.fileio)
             send_md_msg(self.senderid, "[Error Message]",
-                        "**Data Error**\\\nFailed while reading data file.\\\nRecreated data file.\\\nTime:" + datetime.now().strftime(
+                        "**Data Error**<br>Failed while reading data file.<br>Recreated data file.<br>Time:" + datetime.now().strftime(
                             "%c"), self.webhook_url)
             return
 
@@ -299,7 +378,7 @@ class RobotCommands:
                 self.cmd = json.load(f)
         except Exception as e:
             send_md_msg(self.senderid, "[Error Message]",
-                        "**Data Error**\\\nFailed while reading command data file.\\\nTime:" + datetime.now().strftime(
+                        "**Data Error**<br>Failed while reading command data file.<br>Time:" + datetime.now().strftime(
                             "%c"), self.webhook_url)
             return
 
@@ -311,7 +390,7 @@ class RobotCommands:
             else:
                 for d in cmd_directory:
                     fa_cmd += d + self.dat["config"].get("command_spliter", "$")
-            help_str = "Usage of command '**" + fa_cmd + "**':\\\n"
+            help_str = "Usage of command '**" + fa_cmd + "**':<br>"
             fa_cmd_dict = self.cmd
             for sub in cmd_directory:
                 flag = False
@@ -326,18 +405,18 @@ class RobotCommands:
             if fa_cmd_dict["type"] == "sub":
                 for sub in fa_cmd_dict["sub_commands"]:
                     if sub["type"] == "sub":
-                        help_str += "**" + sub["content"][0] + "**\\\n"
+                        help_str += "**" + sub["content"][0] + "**<br>"
                     elif sub["type"] == "cmd":
                         help_str += "**" + sub["content"][0] + "** "
                         for arg in sub["arg"]:
                             help_str += "\\<" + arg["type"] + " " + arg["content"] + "\\> "
-                        help_str += "\\\n"
+                        help_str += "<br>"
 
             elif fa_cmd_dict["type"] == "cmd":
                 help_str += "**" + fa_cmd_dict["content"][0] + "** "
                 for arg in fa_cmd_dict["arg"]:
                     help_str += "\\<" + arg["type"] + " " + arg["content"] + "\\>"
-                help_str += "\\\n"
+                help_str += "<br>"
 
             return help_str[:-2]
         except Exception as e:
@@ -370,12 +449,12 @@ class RobotCommands:
                     fa_cmd = ""
                     if len(cmd_directory) == 0:
                         send_md_msg(self.senderid, "[Error Message]",
-                                    "**Incorrect command usage:**\\\nUnknown prefix '" + sub + "'!", self.webhook_url)
+                                    "**Incorrect command usage:**<br>Unknown prefix '" + sub + "'!", self.webhook_url)
                         return
                     for d in cmd_directory:
                         fa_cmd += d + self.dat["config"].get("command_spliter", "$")
                     send_md_msg(self.senderid, "[Error Message]",
-                                "**Incorrect command usage:**\\\nCommand" + fa_cmd + " does not have a subcommand:\\\n" + sub + "\\\n" + self.generate_help(
+                                "**Incorrect command usage:**<br>Command" + fa_cmd + " does not have a subcommand:<br>" + sub + "<br>" + self.generate_help(
                                     cmd_directory), self.webhook_url)
                     return
         fa_cmd = ""
@@ -391,7 +470,7 @@ class RobotCommands:
 
             if not flag:
                 send_md_msg(self.senderid, "[Error Message]",
-                            "**Incorrect command usage:**\\\n" + fa_cmd + " requires a subcommand.\\\n" + self.generate_help(
+                            "**Incorrect command usage:**<br>" + fa_cmd + " requires a subcommand.<br>" + self.generate_help(
                                 cmd_directory), self.webhook_url)
                 return
         have_spec_arg = False
@@ -402,8 +481,8 @@ class RobotCommands:
         if ((not have_spec_arg) and len(cmd) != len(cmd_directory) + len(cur_dict["arg"])) or (
                 have_spec_arg and len(cmd) < len(cmd_directory) + len(cur_dict["arg"])):
             send_md_msg(self.senderid, "[Error Message]",
-                        "**Incorrect command usage:**\\\n" + fa_cmd + " requires " + str(
-                            len(cur_dict["arg"])) + " arguments.\\\n" + self.generate_help(
+                        "**Incorrect command usage:**<br>" + fa_cmd + " requires " + str(
+                            len(cur_dict["arg"])) + " arguments.<br>" + self.generate_help(
                             cmd_directory), self.webhook_url)
             return
         else:
@@ -415,21 +494,21 @@ class RobotCommands:
                 elif arg["type"] == "choice":
                     if not cmd[arg_inx] in arg["choice"]:
                         send_md_msg(self.senderid, "[Error Message]",
-                                    "**Incorrect command usage:**\\\n" + fa_cmd + " required an literal argument '" +
+                                    "**Incorrect command usage:**<br>" + fa_cmd + " required an literal argument '" +
                                     arg[
                                         "content"] + "' ,with choices: " + str(
-                                        arg["choice"]) + "\\\nBut the given argument value is not a valid choice: '" +
+                                        arg["choice"]) + "<br>But the given argument value is not a valid choice: '" +
                                     cmd[
-                                        arg_inx] + "'\\\n" + self.generate_help(
+                                        arg_inx] + "'<br>" + self.generate_help(
                                         cmd_directory), self.webhook_url)
                         return
                     arg_dict[arg["content"]] = cmd[arg_inx]
                 elif arg["type"] == "int":
                     if not cmd[arg_inx].isdigit():
                         send_md_msg(self.senderid, "[Error Message]",
-                                    "**Incorrect command usage:**\\\n" + fa_cmd + " required an integer argument '" +
-                                    arg["content"] + "\\\nBut the given argument value is not an integer: '" +
-                                    cmd[arg_inx] + "'\\\n" + self.generate_help(
+                                    "**Incorrect command usage:**<br>" + fa_cmd + " required an integer argument '" +
+                                    arg["content"] + "<br>But the given argument value is not an integer: '" +
+                                    cmd[arg_inx] + "'<br>" + self.generate_help(
                                         cmd_directory), self.webhook_url)
                         return
                     arg_dict[arg["content"]] = cmd[arg_inx]

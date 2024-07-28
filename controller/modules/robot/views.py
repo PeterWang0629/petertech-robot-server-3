@@ -25,13 +25,13 @@ def handle_info(req_data):
     except:
         dat = reset_data(fileio)
         send_md_msg(sender_id, "[Error Message]",
-                    "**Data Error**\\\nFailed while reading data file.\\\nRecreated data file.\\\nTime:" + datetime.now().strftime(
+                    "**Data Error**<br>Failed while reading data file.<br>Recreated data file.<br>Time:" + datetime.now().strftime(
                         "%c"), webhook_url)
         return
     if not dict_cmp(init_dat, dat):
         dat = reset_data(fileio)
         send_md_msg(sender_id, "[Error Message]",
-                    "**Data Error**\\\nThe data file format is incorrect.\\\nRecreated data file.\\\nTime:" + datetime.now().strftime(
+                    "**Data Error**<br>The data file format is incorrect.<br>Recreated data file.<br>Time:" + datetime.now().strftime(
                         "%c"), webhook_url)
         return
 
@@ -51,7 +51,7 @@ def handle_info(req_data):
             pass
         if sender_id in dat["ban"]:
             send_md_msg(sender_id, "[Error Message]",
-                        "**Access Denied**\\\n**" + sender_nick + "** has been banned from this robot.", webhook_url)
+                        "**Access Denied**<br>**" + sender_nick + "** has been banned from this robot.", webhook_url)
             return
 
         elif sender_nick in dat["ban"]:
@@ -60,7 +60,7 @@ def handle_info(req_data):
             dat["ban"].append(sender_id)
             save_data(fileio, dat)
             send_md_msg(sender_id, "[Error Message]",
-                        "**Access Denied**\\\n**" + sender_nick + "**'s ID has been banned from this robot.",
+                        "**Access Denied**<br>**" + sender_nick + "**'s ID has been banned from this robot.",
                         webhook_url)
 
             return
@@ -87,9 +87,9 @@ def handle_info(req_data):
         logger.log("ERROR", "")
         save_data(fileio, dat)
         send_md_msg(sender_id, "[Error Message]",
-                    "**Error Report**\\\n**Brief**:\n```text\n" + dat["error"][err_id]["error"].split("\n")[
+                    "**Error Report**<br>**Brief**:\n```text\n" + dat["error"][err_id]["error"].split("\n")[
                         -2] + "\n```\n**Time**:" + datetime.now().strftime(
-                        "%c") + "\\\n**Error ID:**:" + err_id + "\\\n**Detailed Error Report:**\\\n[http://180.166.0.98:1453/error?id={err_id}](http://180.166.0.98:1453/error?id={err_id})".format(
+                        "%c") + "<br>**Error ID:**:" + err_id + "<br>**Detailed Error Report:**<br>[http://180.166.0.98:1453/error?id={err_id}](http://180.166.0.98:1453/error?id={err_id})".format(
                         err_id=err_id), webhook_url)
 
 
@@ -107,19 +107,3 @@ def get_data():
         return jsonify({"success": False, "msg": "invalid signature", "data": None}), 403
     logger.log("WARN", 'Root route received Non-POST Request')
     return jsonify({"success": False, "msg": "only accept POST", "data": None}), 403
-
-
-def del_outdated_file():
-    global access_history
-    while True:
-        files = os.listdir("guijiao_output")
-        for i in files:
-            path = "guijiao_output\\" + i
-            if (time.time() - os.path.getctime(path)) > 21600:
-                os.system("del " + path)
-                print("Deleted Outdated File " + i)
-
-        time.sleep(60)
-
-
-threading.Thread(target=del_outdated_file).start()
