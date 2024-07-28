@@ -1,6 +1,6 @@
 from flask import Blueprint
 from main import fileio
-import controller.libraries.server.configure as configure
+import library.server.configure as configure
 
 # 创建蓝图对象
 http_blu = Blueprint("http", __name__)

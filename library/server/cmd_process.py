@@ -1,6 +1,6 @@
-import controller.libraries.server.configure as configure
-from controller.libraries.server.fileio import FileIO
-from controller.libraries.server.logger import Logger
+import library.server.configure as configure
+from library.server.fileio import FileIO
+from library.server.logger import Logger
 
 
 class ConsoleCommands:

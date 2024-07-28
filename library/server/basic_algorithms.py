@@ -1,5 +1,5 @@
 import time, json
-import controller.libraries.server.configure as configure
+import library.server.configure as configure
 
 
 def dict_cmp(a: dict | str, b: dict | str) -> bool:

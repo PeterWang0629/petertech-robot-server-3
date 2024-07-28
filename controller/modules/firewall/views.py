@@ -2,7 +2,7 @@
 # from main import logger, fileio, app
 # import traceback, secrets
 # from flask import jsonify, request
-# from controller.libraries.algorithms import *
+# from controller.library.algorithms import *
 # from werkzeug.exceptions import HTTPException
 #
 #

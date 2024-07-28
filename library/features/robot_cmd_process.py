@@ -1,20 +1,16 @@
-# from controller.modules.robot import robot_blu
+from library.server.basic_algorithms import read_data, get_init_data, reset_data, dict_cmp, save_data, \
+    md_startswith_title, md_endswith_title, time_stamp_to_str
+from library.server.cmd_process import ConsoleCommands
+from library.server.fileio import FileIO
+from library.server.logger import Logger
+from library.features.dingtalk import *
+from datetime import datetime
 import datetime
 import os
-import random
 import subprocess
 import threading
-from datetime import datetime
-
 import psutil
-
-from controller.libraries.features.dingtalk import *
-from controller.libraries.features.guijiao import *
-from controller.libraries.features.kamiya_api import *
-from controller.libraries.server.basic_algorithms import *
-from controller.libraries.server.cmd_process import ConsoleCommands
-from controller.libraries.server.fileio import FileIO
-from controller.libraries.server.logger import Logger
+import time
 
 
 class RobotCommandFuncs:
@@ -30,19 +26,19 @@ class RobotCommandFuncs:
     def modify_config(self, Key, Value):
         self.dat["config"][Key] = Value
         save_data(self.fileio, self.dat)
-        send_md_msg(self.senderid,"[Robot Message]", "Operation success.", self.webhook_url)
+        send_md_msg(self.senderid, "[Robot Message]", "Operation success.", self.webhook_url)
 
     def add_ref(self, Ref_Type, Ref_Key, Ref_Msg):
         if Ref_Type == "md":
             tmp = {"type": "md", "answer": Ref_Msg.replace("\\n", "\n")}
             self.dat["ref"][Ref_Key] = tmp
             save_data(self.fileio, self.dat)
-            send_md_msg(self.senderid,"[Robot Message]", "Operation success.", self.webhook_url)
+            send_md_msg(self.senderid, "[Robot Message]", "Operation success.", self.webhook_url)
         elif Ref_Type == "txt":
             tmp = {"type": "txt", "answer": Ref_Msg.replace("\\n", "\n")}
             self.dat["ref"][Ref_Key] = tmp
             save_data(self.fileio, self.dat)
-            send_md_msg(self.senderid,"[Robot Message]", "Operation success.", self.webhook_url)
+            send_md_msg(self.senderid, "[Robot Message]", "Operation success.", self.webhook_url)
         else:
             pass
 
@@ -50,9 +46,9 @@ class RobotCommandFuncs:
         if Ref_Key in self.dat["ref"]:
             self.dat["ref"].pop(Ref_Key)
             save_data(self.fileio, self.dat)
-            send_md_msg(self.senderid,"[Robot Message]", "Operation success.", self.webhook_url)
+            send_md_msg(self.senderid, "[Robot Message]", "Operation success.", self.webhook_url)
         else:
-            send_md_msg(self.senderid,"[Robot Message]", "Non-existent autoresponders.", self.webhook_url)
+            send_md_msg(self.senderid, "[Robot Message]", "Non-existent autoresponders.", self.webhook_url)
 
     def list_ref(self):
         if self.dat["ref"] == {}:
@@ -104,7 +100,7 @@ class RobotCommandFuncs:
     def set_key(self, GPT_Key):
         self.dat["gpt"]["key"] = GPT_Key
         save_data(self.fileio, self.dat)
-        send_md_msg(self.senderid,"[Robot Message]", "Operation success.", self.webhook_url)
+        send_md_msg(self.senderid, "[Robot Message]", "Operation success.", self.webhook_url)
 
     def server_status(self):
         cpu = psutil.cpu_percent()
@@ -113,7 +109,7 @@ class RobotCommandFuncs:
         ysy = float(mem.used) / 1024 / 1024 / 1024
 
         text = "CPU Usage:" + str(cpu * 10) + "%\nRAM: Used " + str(ysy)[:4] + "GB/" + str(zj)[
-                                                                                              :4] + "GB\nRAM Usage:" + str(
+                                                                                       :4] + "GB\nRAM Usage:" + str(
             int(ysy / zj * 100)) + "%"
         send_text_msg(self.senderid, text, self.webhook_url)
 
@@ -125,11 +121,11 @@ class RobotCommandFuncs:
 
     def os_cmd(self, Os_Cmd):
         os.system(Os_Cmd)
-        send_md_msg(self.senderid,"[Robot Message]", "Operation success.", self.webhook_url)
+        send_md_msg(self.senderid, "[Robot Message]", "Operation success.", self.webhook_url)
 
     def python_code(self, Py_Code):
         exec(Py_Code)
-        send_md_msg(self.senderid,"[Robot Message]", "Operation success.", self.webhook_url)
+        send_md_msg(self.senderid, "[Robot Message]", "Operation success.", self.webhook_url)
 
     def say_text(self, Msg):
         send_text_msg(self.senderid, Msg, self.webhook_url)
@@ -142,17 +138,16 @@ class RobotCommandFuncs:
 
     def say_text_in(self, Msg, Webhook_Url):
         send_text_msg(self.senderid, Msg, Webhook_Url)
-        send_md_msg(self.senderid,"[Robot Message]", "Operation success.", self.webhook_url)
+        send_md_msg(self.senderid, "[Robot Message]", "Operation success.", self.webhook_url)
 
     def say_md_in(self, Msg, Webhook_Url):
         send_md_msg(self.senderid, "[Message]", Msg, Webhook_Url)
-        send_md_msg(self.senderid,"[Robot Message]", "Operation success.", self.webhook_url)
-
+        send_md_msg(self.senderid, "[Robot Message]", "Operation success.", self.webhook_url)
 
     def reset_data(self):
         self.dat = reset_data(self.fileio)
         save_data(self.fileio, self.dat)
-        send_md_msg(self.senderid,"[Robot Message]", "Operation success.", self.webhook_url)
+        send_md_msg(self.senderid, "[Robot Message]", "Operation success.", self.webhook_url)
 
     def show_data(self):
         send_md_msg(self.senderid, "[Data]", "**存储的数据:**\\\n" + str(self.dat), self.webhook_url)
@@ -160,7 +155,7 @@ class RobotCommandFuncs:
     def set_data(self, Data):
         self.dat = json.loads(Data)
         save_data(self.fileio, self.dat)
-        send_md_msg(self.senderid,"[Robot Message]", "Operation success.", self.webhook_url)
+        send_md_msg(self.senderid, "[Robot Message]", "Operation success.", self.webhook_url)
 
     def set_timer(self, Name, Time):
         if not type(self.dat["timer"]) == dict or "name" in self.dat["timer"] or "time" in self.dat["timer"]:
@@ -262,6 +257,11 @@ class RobotCommandFuncs:
         task.start()
         send_md_msg(self.senderid, "[Device Status]",
                     f"**Task started**\\\nDo not start the task again!",
+                    self.webhook_url)
+
+    def check_minecraft_server_status(self):
+        send_md_msg(self.senderid, "[Robot Message]",
+                    f"Please wait, checking...",
                     self.webhook_url)
 
 
@@ -415,9 +415,11 @@ class RobotCommands:
                 elif arg["type"] == "choice":
                     if not cmd[arg_inx] in arg["choice"]:
                         send_md_msg(self.senderid, "[Error Message]",
-                                    "**Incorrect command usage:**\\\n" + fa_cmd + " required an literal argument '" + arg[
+                                    "**Incorrect command usage:**\\\n" + fa_cmd + " required an literal argument '" +
+                                    arg[
                                         "content"] + "' ,with choices: " + str(
-                                        arg["choice"]) + "\\\nBut the given argument value is not a valid choice: '" + cmd[
+                                        arg["choice"]) + "\\\nBut the given argument value is not a valid choice: '" +
+                                    cmd[
                                         arg_inx] + "'\\\n" + self.generate_help(
                                         cmd_directory), self.webhook_url)
                         return
