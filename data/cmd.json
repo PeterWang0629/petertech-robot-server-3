@@ -498,8 +498,11 @@
         "mc",
         "m"
       ],
-      "arg": [],
-      "func": "query_minecraft_server_status()"
+      "arg": [{
+        "type": "int",
+        "content": "Print_Chat"
+      }],
+      "func": "query_minecraft_server_status({Print_Chat})"
     }
   ]
 }

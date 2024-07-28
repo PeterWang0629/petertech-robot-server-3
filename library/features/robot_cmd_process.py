@@ -263,7 +263,7 @@ class RobotCommandFuncs:
                     f"**Task started**<br>Do not start the task again!",
                     self.webhook_url)
 
-    def query_minecraft_server_status(self):
+    def query_minecraft_server_status(self, Print_Chat):
         send_md_msg(self.senderid, "[Robot Message]",
                     f"Please wait, querying...",
                     self.webhook_url)
@@ -294,6 +294,7 @@ class RobotCommandFuncs:
                 self.player_count = None
                 self.logged_in = False
                 self.login_password = login_password
+                self.chat = ""
 
             def handle_incoming(self, packet=None):
                 return
@@ -311,7 +312,9 @@ class RobotCommandFuncs:
                     connection.write_packet(packet)
                     self.logged_in = True
                 try:
-                    print(parse_packet(chat_packet.json_data, {}, "text"))
+                    # print(parse_packet(chat_packet.json_data, {}, "text"))
+
+                    self.chat += parse_packet(chat_packet.json_data, {}, "text") + "<br>"
                     if not self.queue_length and self.logged_in and self.joined_game:
                         self.queue_length = extract_queue_length(
                             parse_packet(chat_packet.json_data, {}, "text"))
@@ -339,6 +342,8 @@ class RobotCommandFuncs:
         connection.disconnect()
         ts2 = time.time()
         # print(handler.player_count, handler.queue_length)
+        if Print_Chat:
+            send_md_msg(self.senderid, "[Chat Log]", handler.chat, self.webhook_url)
         send_md_msg(self.senderid, "[Robot Message]",
                     f"**Minecraft Server Status**<br>**Time:** {time.strftime('%Y-%m-%d %H:%M:%S')}<br>**DNS Record:** {address}:{port}<br>**Player Count:** {handler.player_count[0]}+{handler.player_count[1]}<br>**Queue Length:** {handler.queue_length[0]}<br>*Query completed in {round(ts2 - ts1, 2)} sec*",
                     self.webhook_url)
