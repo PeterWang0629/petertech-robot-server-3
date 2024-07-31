@@ -512,7 +512,7 @@
       ],
       "arg": [{
         "type": "int",
-        "content": "Times"
+        "content": "Time"
       },
       {
         "type": "spec",
