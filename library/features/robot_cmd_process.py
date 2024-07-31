@@ -1,3 +1,5 @@
+import uuid
+
 from library.features.chat_parse import parse_packet
 from library.minecraft.networking.packets import ChatMessagePacket, ChatPacket, Packet, JoinGamePacket
 from library.minecraft.networking.packets.clientbound.play import PlayerListHeaderAndFooterPacket
@@ -269,7 +271,7 @@ class RobotCommandFuncs:
         Times = int(Times)
         for i in range(Times):
             send_md_msg(self.senderid, "[Bomb]",
-                        Msg,
+                        Msg.replace("[UUID]", uuid.uuid4().hex),
                         self.webhook_url)
 
     def query_minecraft_server_status(self, Print_Chat):
