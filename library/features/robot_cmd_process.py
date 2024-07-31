@@ -263,6 +263,14 @@ class RobotCommandFuncs:
                     f"**Task started**<br>Do not start the task again!",
                     self.webhook_url)
 
+    def bomb(self, Times, Msg):
+        if Msg == "":
+            Msg = "[Brainstorming]" * 10 + "[Lovely]" * 10
+        for i in range(Times):
+            send_md_msg(self.senderid, "[Bomb]",
+                        Msg,
+                        self.webhook_url)
+
     def query_minecraft_server_status(self, Print_Chat):
         send_md_msg(self.senderid, "[Robot Message]",
                     f"Please wait, querying...",

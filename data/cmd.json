@@ -503,6 +503,22 @@
         "content": "Print_Chat"
       }],
       "func": "query_minecraft_server_status({Print_Chat})"
+    },
+    {
+      "type": "cmd",
+      "content": [
+        "bomb",
+        "b"
+      ],
+      "arg": [{
+        "type": "int",
+        "content": "Times"
+      },
+      {
+        "type": "spec",
+        "content": "Msg"
+      }],
+      "func": "query_minecraft_server_status({Times}, {Msg})"
     }
   ]
 }
