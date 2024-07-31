@@ -265,7 +265,7 @@ class RobotCommandFuncs:
 
     def bomb(self, Times, Msg):
         if Msg == "":
-            Msg = "[Brainstorming]" * 10 + "[Lovely]" * 10
+            Msg = "[Brainstorming]" * 20 + "[Lovely]" * 20
         Times = int(Times)
         for i in range(Times):
             send_md_msg(self.senderid, "[Bomb]",
