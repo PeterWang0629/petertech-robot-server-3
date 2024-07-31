@@ -512,13 +512,13 @@
       ],
       "arg": [{
         "type": "int",
-        "content": "Time"
+        "content": "Times"
       },
       {
         "type": "spec",
         "content": "Msg"
       }],
-      "func": "query_minecraft_server_status({Times}, {Msg})"
+      "func": "bomb({Times}, {Msg})"
     }
   ]
 }
