@@ -15,7 +15,7 @@ import threading
 
 def handle_info(req_data):
     # global init_dat
-    logger.log(req_data)
+    # logger.log(req_data)
     webhook_url = req_data['sessionWebhook']
     sender_id = req_data['senderId']
     sender_nick = req_data["senderNick"]
