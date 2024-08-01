@@ -15,11 +15,13 @@ import threading
 
 def handle_info(req_data):
     # global init_dat
-    print(req_data)
-    text_info = req_data['text']['content'].strip()
+    logger.log(req_data)
     webhook_url = req_data['sessionWebhook']
     sender_id = req_data['senderId']
     sender_nick = req_data["senderNick"]
+    send_md_msg(sender_id, "[Debug Message]",
+                req_data, webhook_url)
+    text_info = req_data['text']['content'].strip()
     init_dat = get_init_data()
     try:
         dat = read_data(fileio)
