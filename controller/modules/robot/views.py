@@ -69,7 +69,7 @@ def handle_info(req_data):
             if dat["ref"][text_info]["type"] == "md":
                 send_md_msg(sender_id, "[Robot Message]", dat["ref"][text_info]["answer"], webhook_url)
             elif dat["ref"][text_info]["type"] == "txt":
-                send_text_msg(sender_id, "[Robot Message]", dat["ref"][text_info]["answer"], webhook_url)
+                send_text_msg(sender_id, dat["ref"][text_info]["answer"], webhook_url)
 
         else:
             cmd = RobotCommands(req_data, fileio, logger)
