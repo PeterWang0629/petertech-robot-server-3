@@ -3,7 +3,7 @@ name: Auto Release
 on:
   push:
     branches:
-      - main
+      - master
       - dev
 
 jobs:
@@ -33,7 +33,7 @@ jobs:
       id: version_info
       run: |
         echo "COMMIT_MESSAGE '${{ env.commit_message }}'"
-        if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+        if [[ "${{ github.ref }}" == "refs/heads/master" ]]; then
           VERSION_TYPE="release"
         elif [[ "${{ env.commit_message }}" == *"<insider>"* ]]; then
           VERSION_TYPE="insider"
@@ -49,24 +49,24 @@ jobs:
         echo "VERSION_TYPE '${VERSION_TYPE}'"
         echo "version_type=${VERSION_TYPE}" >> $GITHUB_ENV
 
-    - name: Calculate main and dev versions
+    - name: Calculate master and dev versions
       id: version_calculation
       run: |
         git fetch origin
-        LAST_main_COMMIT=$(git rev-list origin/main --max-count=1)
-        main_VERSION=$(git rev-list --count origin/main)
+        LAST_master_COMMIT=$(git rev-list origin/master --max-count=1)
+        master_VERSION=$(git rev-list --count origin/master)
         DEV_VERSION=0
-        if [[ "${{ github.ref }}" != "refs/heads/main" ]]; then
-          DEV_VERSION=$(git rev-list --count "${LAST_main_COMMIT}..HEAD")
+        if [[ "${{ github.ref }}" != "refs/heads/master" ]]; then
+          DEV_VERSION=$(git rev-list --count "${LAST_master_COMMIT}..HEAD")
         fi
-        echo "main_version=${main_VERSION}" >> $GITHUB_ENV
+        echo "master_version=${master_VERSION}" >> $GITHUB_ENV
         echo "dev_version=${DEV_VERSION}" >> $GITHUB_ENV
 
     - name: Create Release version string
       id: create_version_string
       run: |
         BRANCH_NAME=$(echo "${{ github.ref }}" | awk -F'/' '{print $NF}')
-        VERSION_STRING="${{ env.version_type }}.${{ env.main_version }}.${{ env.dev_version }}.${{ env.commit_hash }}@${BRANCH_NAME}"
+        VERSION_STRING="${{ env.version_type }}.${{ env.master_version }}.${{ env.dev_version }}.${{ env.commit_hash }}@${BRANCH_NAME}"
         echo "release_version=${VERSION_STRING}" >> $GITHUB_ENV
 
     - name: Create release notes
